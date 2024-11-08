@@ -1,9 +1,11 @@
 <?php
 
 include ("connection.php");
+$json = file_get_contents('php://input');
+$data = json_decode($json, true);
 
 $users_id = 1;
-$id = 3;
+$id = $data["id"];
 
 $query = $connection->prepare("DELETE from transactions WHERE users_id = $users_id and id=$id");
 

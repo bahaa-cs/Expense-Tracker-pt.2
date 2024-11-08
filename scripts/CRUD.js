@@ -136,23 +136,35 @@ document.getElementById("transactionForm").addEventListener("submit",(event) => 
 // }
 // )
 
-//delete
-// document.addEventListener("click", (event)=>{
-//     let transactions = JSON.parse(localStorage.getItem("Transactions")) || []
+// delete
+document.addEventListener("click", (event)=>{
 
-//     if(event.target.classList.contains("delete-btn")){
-        
-//         let transactionID = event.target.parentElement.parentElement.getAttribute("id")
-        
-//         let index = transactions.findIndex(transaction=> transaction.id == transactionID)
 
-//         transactions.splice(index,1)
+    if(event.target.classList.contains("delete-btn")){
         
-//         location.reload()
+        let transactionID = event.target.parentElement.parentElement.getAttribute("id")
         
-//     }
-//     localStorage.setItem("Transactions", JSON.stringify(transactions))
-//     // reloadLocalStorage(transactions)
+        let transactionData = {
+            id:transactionID
+        }
+        axios.post('http://localhost:8080/expense-tracker-server/apis/deleteTransaction.php',
+            transactionData)
+         .then(response => {console.log('Response:', response.data);
+         })
+         .catch(error => {console.error('Error:', error);
+         });
+         let transactions;
+         axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
+         .then((response) =>{
+           transactions = response.data;
+           reloadLocalStorage(transactions)
+           location.reload()
+         })
+
+        
+    }
     
-// }
-// )
+ 
+    
+}
+)
