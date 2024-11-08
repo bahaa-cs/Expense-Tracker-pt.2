@@ -1,0 +1,94 @@
+form{
+    gap: 20px;
+}
+
+.transaction-info{
+    border-radius: 50px;
+    width: 100%;
+    height: auto;
+    padding: 15px;
+    align-items: center;
+    gap: 10px;
+}
+
+.data-info{
+    width: 100%;
+    gap: 15px;
+}
+
+
+.Titles, .data-info>div{
+    justify-content: space-around;
+    width: 100%;
+
+}
+
+
+.Titles>div, .data-info>div>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+}
+
+.data>div{
+    text-align: center;
+    overflow-wrap:anywhere;
+    width: 160px;
+}
+
+
+.form-section{
+    width: 100%;
+    padding: 15px 15px;
+    border-radius: 50px;
+    margin: 20px 0px;
+    font-size: large;
+    justify-content: center;
+}
+
+.create-transaction{
+    width: 100%;
+}
+
+
+
+.data{
+    color: #141414;
+    font-size: 15px;
+    font-weight: 200;
+}
+
+.action-btns{
+    gap: 4px;  
+    flex-wrap: wrap;
+}
+
+.filter-container{
+    padding: 15px 15px;
+    border-radius: 50px;
+    margin: 20px 0px;
+    font-size: large;
+    justify-content: space-between;
+    gap :15px;
+    
+}
+
+.filter-section{
+    font-size: large;
+    justify-content: center;
+    gap :15px;
+    flex-wrap: wrap;
+
+}
+
+.filter-title{
+    margin-left: 32px;
+    font-weight: bolder;
+    width: 200px;
+    font-size: 35px;
+}
+
+.filter-section>input{
+    text-align: center;
+}

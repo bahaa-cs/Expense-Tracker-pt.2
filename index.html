@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="./styles/home.css">
+    <link rel="stylesheet" href="./styles/base/base.css">
+    <link rel="stylesheet" href="./styles/base/colors.css">
+    <link rel="stylesheet" href="./styles/base/utilities.css">
+</head>
+<body>
+    <nav class="flex row center nav-bar nav-margin">
+        <div class="flex nav-title">Expense Tracker</div>
+
+        <div class="flex budget-section">
+            <div class="budget-txt">Total Budget:</div>
+            <div class="budget-total" id="budget-total"></div>
+        </div>
+    </nav>
+
+    <div class="flex form-section primary-bg">
+        <form action="" class="flex column" id="transactionForm">
+            <label for="id">Transaction ID (for edit action)</label>
+            <input type="text" id="id" disabled>
+            <label for="price">Price: </label>
+            <input type="text" id="price" placeholder="0" required>
+            <label for="type">Type: </label>
+            <select id="type" name="type" required>
+                <option value="income" selected>income</option>
+                <option value="expense">expense</option>
+            </select>
+            <label for="date">Date: </label>
+            <input type="date" id="date" required>
+            <label for="notes">Notes: </label>
+            <input type="text" id="notes" placeholder="notes" required>
+            <button type="submit" class="flex center create-transaction filled-btn green-bg white-txt">
+                Save Transaction
+            </button>
+        </form>
+    </div>
+    
+    
+    
+    <div class="flex row filter-container primary-bg">
+        <div class="flex center filter-title green-txt">Filter</div>
+        
+        <div class="flex row filter-section">
+            <input type="number" id="min-price-filter" placeholder="filter by min price">
+            <input type="number" id="max-price-filter" placeholder="filter by max price">
+            <select id="type-filter">
+                <option value="all" selected>all types</option>
+                <option value="income">income</option>
+                <option value="expense">expense</option>
+            </select>
+            <input type="date" id="date-filter">
+            <input type="text" id="notes-filter" placeholder="filter by notes">
+            <button id="filter" class="white-txt green-bg filled-btn">filter</button>
+    
+        </div>
+    </div>
+
+
+
+    <section class="flex column transaction-info primary-bg" id="transaction-info">
+        <div class="flex row Titles green-txt">
+            <div class="price-title green-txt">Price</div>
+            <div class="type-title green-txt">Type</div>
+            <div class="date-title green-txt">Date</div>
+            <div class="notes-title green-txt">Notes</div>
+            <div class="actions-title green-txt">Actions</div>
+        </div>
+
+        <div class="flex column data-info black-txt" id="data-info">
+
+        </div>
+
+    </section>
+
+    <script src="./scripts/CRUD.js"></script>
+    <script src="./scripts/budget.js"></script>
+    <script src="./scripts/filter.js"></script>
+</body>
+</html>
