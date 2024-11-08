@@ -4,6 +4,12 @@ axios.post('http://localhost:8080/expense-tracker-server/apis/getTotalBudget.php
     {
         users_id : 1
     }
+    ,
+    {
+        headers : {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
+    }
 )
 .then((response) =>{
     transactions = response.data || [];

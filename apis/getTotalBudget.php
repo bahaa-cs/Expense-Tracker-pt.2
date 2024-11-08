@@ -2,13 +2,11 @@
 
 include ("connection.php");
 
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
-
-$users_id = $data["users_id"];
+$users_id = $_POST["users_id"];
 
 
-$query = $connection->prepare("SELECT type , price FROM transactions WHERE users_id = $users_id");
+$query = $connection->prepare("SELECT type , price FROM transactions WHERE users_id = ?");
+$query->bind_param("i",$users_id);
 $query->execute();
 
 $result = $query->get_result();
