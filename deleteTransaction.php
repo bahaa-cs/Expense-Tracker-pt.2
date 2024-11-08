@@ -11,7 +11,7 @@ if ($query) {
     if ($query->execute())
         echo "Deleted successfully";
     else
-        echo "Error executing query: " . $query->error;
+        echo "Error executing delete query: " . $query->error;
 } else
-    echo "Error preparing query: " . $connect->error;
+    echo "Error preparing delete query: " . $connect->error;
 
