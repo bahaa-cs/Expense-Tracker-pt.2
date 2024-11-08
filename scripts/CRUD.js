@@ -20,7 +20,7 @@ const saveTransaction = () => {
     // axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
     // .then((response) =>{
     //   transactions = response.data;
-    //   reloadLocalStorage(transactions);
+    //   reloadHTML(transactions);
     // })
     
     // let transactionID = document.getElementById("id").value
@@ -93,7 +93,7 @@ const saveTransaction = () => {
     // localStorage.setItem("Transactions", JSON.stringify(transactions))
    
 
-const reloadLocalStorage  = (transactions) =>{
+const reloadHTML  = (transactions) =>{
 
     let data_info_element=document.getElementById("data-info")
     
@@ -113,7 +113,8 @@ const reloadLocalStorage  = (transactions) =>{
     } )
 
 }
-window.addEventListener("load", () => {
+
+const reloadTransactions = () =>{
     let transactions;
     axios.post('http://localhost:8080/expense-tracker-server/apis/getTransactions.php',
         {users_id : 1},
@@ -126,9 +127,13 @@ window.addEventListener("load", () => {
     .then((response) =>{
     
       transactions = response.data;
-      reloadLocalStorage(transactions);
+      reloadHTML(transactions);
     })
-    
+
+}
+
+window.addEventListener("load", () => {
+    reloadTransactions()    
 })
 
 // event listeners
@@ -161,7 +166,7 @@ document.getElementById("transactionForm").addEventListener("submit",(event) => 
                 axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
                 .then((response) =>{
                     transactions = response.data;
-                    reloadLocalStorage(transactions)
+                    reloadHTML(transactions)
             })
             .catch(error => {console.error('Error:', error);
             });
@@ -203,7 +208,7 @@ document.addEventListener("click", (event)=>{
         //  axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
         //  .then((response) =>{
         //    transactions = response.data;
-        //    reloadLocalStorage(transactions)
+        //    reloadHTML(transactions)
         //    location.reload()
         //  })
 
@@ -222,7 +227,7 @@ document.addEventListener("click", (event)=>{
         // document.getElementById("notes").value = transactions[index].notes
 
         // document.getElementById("transactionForm").scrollIntoView()
-        // reloadLocalStorage(transactions)
+        // reloadHTML(transactions)
     }
     
 }
@@ -237,26 +242,21 @@ document.addEventListener("click", (event)=>{
         let transactionID = event.target.parentElement.parentElement.getAttribute("id")
         
         let transactionData = {
+            users_id:1,
             id:transactionID
         }
         axios.post('http://localhost:8080/expense-tracker-server/apis/deleteTransaction.php',
-            transactionData)
-         .then(response => {console.log('Response:', response.data);
+            transactionData,
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+         .then(() => {reloadTransactions()
          })
          .catch(error => {console.error('Error:', error);
          });
-         let transactions;
-         axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
-         .then((response) =>{
-           transactions = response.data;
-           reloadLocalStorage(transactions)
-           location.reload()
-         })
-
-        
+  
     }
-    
- 
-    
 }
 )

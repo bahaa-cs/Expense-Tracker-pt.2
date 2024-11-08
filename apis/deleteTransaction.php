@@ -1,13 +1,13 @@
 <?php
 
 include ("connection.php");
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
 
-$users_id = 1;
-$id = $data["id"];
+$users_id = $_POST["users_id"];
+$id = $_POST["id"];
 
-$query = $connection->prepare("DELETE from transactions WHERE users_id = $users_id and id=$id");
+$query = $connection->prepare("DELETE from transactions WHERE users_id = ? and id = ?");
+
+$query->bind_param("ii",$users_id,$id);
 
 if ($query) {
     if ($query->execute())
