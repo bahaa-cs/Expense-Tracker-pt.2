@@ -2,12 +2,18 @@
 
 include("connection.php");
 
-$id = 5;
-$price = 50;
-$type= "expense";
+$json = file_get_contents('php://input');
+$data = json_decode($json, true);
+
+$id = $data['id'];
+$price = $data['price'];
+$type = $data['type'];
+$date = $data['date'];
+$notes = $data['notes'];
+$users_id = $data['users_id'];
 
 $query = $connection->prepare("UPDATE transactions
-                                SET price = '$price', type='$type'
+                                SET price = '$price', type='$type' , date='$date' , notes = '$notes' , users_id = $users_id
                                 WHERE id='$id'");
 
 if($query){

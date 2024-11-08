@@ -1,6 +1,21 @@
 // localStorage.clear()
-const saveTransaction = async() => {
+const saveTransaction = () => {
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // let transactions;
     // axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
     // .then((response) =>{
@@ -72,6 +87,8 @@ const saveTransaction = async() => {
    
 
 const reloadLocalStorage  = (transactions) =>{
+    if (!transactions)
+        return
     let data_info_element=document.getElementById("data-info")
     
     data_info_element.innerHTML=""
@@ -102,39 +119,100 @@ window.addEventListener("load", () => {
 
 // event listeners
 
-// read
+// create/update
 
 document.getElementById("transactionForm").addEventListener("submit",(event) => {
-    saveTransaction()
-    axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
-    .then((response) =>{
-      transactions = response.data;
-      reloadLocalStorage(transactions)
-})
+
+    let transactionID = document.getElementById("id").value
+    
+    if(transactionID == undefined || transactionID == "")
+        saveTransaction()
+    else{
+
+    //===============================
+        const updated_transactionData = {
+            id:transactionID,
+            price: Number(document.getElementById("price").value),
+            type: document.getElementById("type").value,
+            date: new Date(document.getElementById("date").value).toISOString().slice(0, 10),
+            notes: document.getElementById("notes").value,
+            users_id:1
+            };
+
+
+            axios.post('http://localhost:8080/expense-tracker-server/apis/updateTransaction.php',
+                updated_transactionData)
+            .then(response => {
+                console.log('Response:', response.data);
+                axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
+                .then((response) =>{
+                    transactions = response.data;
+                    reloadLocalStorage(transactions)
+            })
+            .catch(error => {console.error('Error:', error);
+            });
+
+
+
+    })
+
+        document.getElementById("transactionForm").reset()
+}
+//============================================================================
+
+
 })
 
 
 // edit
-// document.addEventListener("click", (event)=>{
-//     if(event.target.classList.contains("edit-btn")){
-//         let transactions = JSON.parse(localStorage.getItem("Transactions")) || []
-        
-//         let transactionID = event.target.parentElement.parentElement.getAttribute("id")
-        
-//         let index = transactions.findIndex(transaction=> transaction.id == transactionID)
+document.addEventListener("click", (event)=>{
+    if(event.target.classList.contains("edit-btn")){
+        let transaction;
+        let transactionID = event.target.parentElement.parentElement.getAttribute("id")
+        axios.post('http://localhost:8080/expense-tracker-server/apis/getTransactionById.php',
+            {id:Number(transactionID)})
+         .then(response => {
+            transaction = response.data;
+            document.getElementById("id").value = transaction.id
+            document.getElementById("price").value = transaction.price
+            document.getElementById("type").value = transaction.type
+            document.getElementById("date").value = transaction.date
+            document.getElementById("notes").value = transaction.notes
 
-//         document.getElementById("id").value = transactions[index].id
-//         document.getElementById("price").value = transactions[index].price
-//         document.getElementById("type").value = transactions[index].type
-//         document.getElementById("date").value = transactions[index].date
-//         document.getElementById("notes").value = transactions[index].notes
+            document.getElementById("transactionForm").scrollIntoView()
+         })
+         .catch(error => {console.error('Error:', error);
+         });
 
-//         document.getElementById("transactionForm").scrollIntoView()
-//         // reloadLocalStorage(transactions)
-//     }
+//===========================================================================
+        //  let transactions;
+        //  axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
+        //  .then((response) =>{
+        //    transactions = response.data;
+        //    reloadLocalStorage(transactions)
+        //    location.reload()
+        //  })
+
+
+
+
+        // let transactions = JSON.parse(localStorage.getItem("Transactions")) || []
+        
+        
+        // let index = transactions.findIndex(transaction=> transaction.id == transactionID)
+
+        // document.getElementById("id").value = transactions[index].id
+        // document.getElementById("price").value = transactions[index].price
+        // document.getElementById("type").value = transactions[index].type
+        // document.getElementById("date").value = transactions[index].date
+        // document.getElementById("notes").value = transactions[index].notes
+
+        // document.getElementById("transactionForm").scrollIntoView()
+        // reloadLocalStorage(transactions)
+    }
     
-// }
-// )
+}
+)
 
 // delete
 document.addEventListener("click", (event)=>{
