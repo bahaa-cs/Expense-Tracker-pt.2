@@ -56,7 +56,12 @@ const saveTransaction = () => {
         // const data = await response.json();
         axios.post('http://localhost:8080/expense-tracker-server/apis/insertTransaction.php',
              transactionData,
-            
+             {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+    
             )
           .then(response => {console.log('Response:', response.data);
           })
