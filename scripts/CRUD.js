@@ -53,8 +53,15 @@ const reloadLocalStorage  = (transactions) =>{
 
 }
 window.addEventListener("load", () => {
-    let transactions = JSON.parse(localStorage.getItem("Transactions")) || [];
-    reloadLocalStorage(transactions);
+    let transactions;
+    axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
+    .then((response) =>{
+      transactions = response.data;
+      reloadLocalStorage(transactions);
+    })
+    
+    
+    
 })
 
 // event listeners

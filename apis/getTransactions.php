@@ -2,7 +2,8 @@
 
 include ("connection.php");
 
-$id = $_GET["id"] ?? null;
+// $id = $_GET["id"] ?? null;
+$id = 1;
 if($id != null){
     $query = $connection->prepare("SELECT * FROM transactions WHERE users_id = $id");
     $query->execute();
@@ -15,7 +16,8 @@ if($id != null){
             $transactions_array[] = $resultObject;
         }
 
-        echo json_encode($transactions_array);
+        $json_result = json_encode($transactions_array);
+        echo $json_result;
     }
 
 }
