@@ -160,7 +160,9 @@ document.addEventListener("click", (event)=>{
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
             })
-         .then(() => {reloadTransactions()
+         .then(() => {
+            reloadTransactions()
+            location.reload()
          })
          .catch(error => {console.error('Error:', error);
          });
