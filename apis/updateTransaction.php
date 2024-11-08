@@ -2,19 +2,17 @@
 
 include("connection.php");
 
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
-
-$id = $data['id'];
-$price = $data['price'];
-$type = $data['type'];
-$date = $data['date'];
-$notes = $data['notes'];
-$users_id = $data['users_id'];
+$id = $_POST['id'];
+$price = $_POST['price'];
+$type = $_POST['type'];
+$date = $_POST['date'];
+$notes = $_POST['notes'];
+$users_id = $_POST['users_id'];
 
 $query = $connection->prepare("UPDATE transactions
-                                SET price = '$price', type='$type' , date='$date' , notes = '$notes' , users_id = $users_id
-                                WHERE id='$id'");
+                                SET price = ?, type=?, date=? , notes = ?, users_id = ?
+                                WHERE id=?");
+$query->bind_param("isssii",$price,$type,$date,$notes,$users_id,$id);
 
 if($query){
 

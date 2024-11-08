@@ -2,14 +2,12 @@
 
 include ("connection.php");
 
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
 
-$id = $data['id'];
-// $id = $_GET["id"] ?? null;
+$id = $_POST['id'];
 
 if($id != null){
-    $query = $connection->prepare("SELECT * FROM transactions WHERE id = $id");
+    $query = $connection->prepare("SELECT * FROM transactions WHERE id = ?");
+    $query->bind_param("i",$id);
     $query->execute();
 
     $result = $query->get_result();
