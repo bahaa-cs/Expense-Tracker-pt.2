@@ -2,16 +2,19 @@
 
 include ("connection.php");
 
-$users_id = 1;
-$price = 30;
-$type= "income";
-$date = "2024-01-01";
-$notes = "my notes";
+$json = file_get_contents('php://input');
+$data = json_decode($json, true);
+
+$price = $data['price'];
+$type = $data['type'];
+$date = $data['date'];
+$notes = $data['notes'];
+$users_id = $data['users_id'];
 
 
 
 $query = $connection->prepare(
-    "INSERT INTO transactions (price, type , date, notes,users_id)
+    "INSERT INTO transactions (price, type , date, notes, users_id)
 VALUES ('$price','$type','$date','$notes', '$users_id')"
 );
 
