@@ -55,7 +55,9 @@ const saveTransaction = () => {
         // }
         // const data = await response.json();
         axios.post('http://localhost:8080/expense-tracker-server/apis/insertTransaction.php',
-             transactionData)
+             transactionData,
+            
+            )
           .then(response => {console.log('Response:', response.data);
           })
           .catch(error => {console.error('Error:', error);
@@ -87,12 +89,11 @@ const saveTransaction = () => {
    
 
 const reloadLocalStorage  = (transactions) =>{
-    if (!transactions)
-        return
+
     let data_info_element=document.getElementById("data-info")
     
     data_info_element.innerHTML=""
-    transactions.forEach(transaction =>{
+    transactions.forEach(transaction  =>{
         data_info_element.innerHTML+=
         `<div class="flex row data black-txt" id="${transaction.id}">
             <div class="price">${transaction.price}</div>
@@ -109,8 +110,16 @@ const reloadLocalStorage  = (transactions) =>{
 }
 window.addEventListener("load", () => {
     let transactions;
-    axios.get('http://localhost:8080/expense-tracker-server/apis/getTransactions.php')
+    axios.post('http://localhost:8080/expense-tracker-server/apis/getTransactions.php',
+        {users_id : 1},
+        {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }
+    )
     .then((response) =>{
+    
       transactions = response.data;
       reloadLocalStorage(transactions);
     })
