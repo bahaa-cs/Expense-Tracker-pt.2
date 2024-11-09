@@ -69,7 +69,6 @@ window.addEventListener("load", () => {
     reloadTransactions()    
 })
 
-// event listeners
 
 // create/update
 

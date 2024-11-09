@@ -17,7 +17,7 @@ axios.post('http://localhost:8080/expense-tracker-server/apis/getTotalBudget.php
         budget = transaction.type=="income" ? budget+Number(transaction.price) : budget-Number(transaction.price)
         })
     document.getElementById("budget-total").innerText = `$ ${budget}`
-    // location.reload()
+    
     })
 
 

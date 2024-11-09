@@ -1,75 +1,31 @@
 document.getElementById("filter").addEventListener("click", () => {
-    // to filter all at once
-    minPrice_transaction = filter_minPrice(transactions)
-    max_price_transaction = filter_maxPrice(minPrice_transaction)
-    type_transaction = filter_type(max_price_transaction)
-    date_transaction = filter_date(type_transaction)
-    
-    final_transaction = filter_notes(date_transaction)
+    const users_id = 1;
+    const minPrice = Number(document.getElementById("min-price-filter").value) || null;
+    const maxPrice = Number(document.getElementById("max-price-filter").value) || null;
+    const type = document.getElementById("type-filter").value || null;
+    const date = document.getElementById("date-filter").value || null;
+    const notes = document.getElementById("notes-filter").value || null;
 
-    reloadLocalStorage(final_transaction)
-
-})
-const filter_minPrice = () =>{
-    let minPrice = Number(document.getElementById("min-price-filter").value)
-    
-    let newTransactions = transactions.filter(transaction => {
-       return Number(transaction.price) >= minPrice
+    axios.post('http://localhost:8080/expense-tracker-server/apis/getFilteredTransactions.php', 
+        {
+            users_id: users_id,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            type: type,
+            date: date,
+            notes: notes
+        },
+        {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        }
+    )
+    .then((response) => {
+        let transactions=response.data;
+        reloadHTML(transactions);
     })
-    localStorage.setItem("newTransactions", JSON.stringify(newTransactions))
-    if (minPrice!==0)
-        return newTransactions
-    return transactions
-}
-
-const filter_maxPrice = (transactions) =>{
-    let maxPrice = Number(document.getElementById("max-price-filter").value)
-    
-    let newTransactions = transactions.filter(transaction => {
-       return Number(transaction.price) <= maxPrice
-    })
-    localStorage.setItem("newTransactions", JSON.stringify(newTransactions))
-    if(maxPrice!==0)
-        return newTransactions
-    return transactions
-};
-
-const filter_type = (transactions) =>{
-    let type = document.getElementById("type-filter").value
-    let newTransactions = transactions.filter(transaction => {
-        return transaction.type == type
-    })
-    localStorage.setItem("newTransactions", JSON.stringify(newTransactions))
-    if(type=="income" || type=="expense")
-        return newTransactions
-    return transactions
-
-}
-
-const filter_date = (transactions) =>{
-    let date = document.getElementById("date-filter").value
-
-    let newTransactions = transactions.filter(transaction => {
-        return transaction.date== date
-    })
-    localStorage.setItem("newTransactions", JSON.stringify(newTransactions))
-    if(date)
-        return newTransactions
-    return transactions
-
-}
-
-const filter_notes = (transactions) =>{
-    let notes = document.getElementById("notes-filter").value
-
-    let newTransactions = transactions.filter(transaction => {
-        return transaction.notes.includes(notes)  })
-    localStorage.setItem("newTransactions", JSON.stringify(newTransactions))
-    if(notes)
-        return newTransactions
-    return transactions
-
-}
-
-
-
+    .catch((error) => {
+        console.error("There was an error!", error);
+    });
+});

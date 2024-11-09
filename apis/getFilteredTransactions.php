@@ -2,49 +2,59 @@
 
 include("connection.php");
 
+$users_id = $_POST["users_id"] ?? null;
+$minPrice = $_POST["minPrice"] ?? null;
+$maxPrice = $_POST["maxPrice"] ?? null;
+$type = $_POST["type"] ?? null;
+$date = $_POST["date"] ?? null;
+$notes = $_POST["notes"] ?? null;
 
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
-$users_id = $data["users_id"];
-$minPrice = $data["minPrice"];
-$maxPrice = $data["maxPrice"];
-$type = $data["type"];
-$date = $data["date"];
-$notes = $data["notes"];
-
-$query_script="SELECT * FROM transactions WHERE users_id = $users_id";
+$query_script = "SELECT * FROM transactions WHERE users_id = ?";
+$params = [$users_id];
+$types = "i";
 
 if ($minPrice !== null) {
-    $query_script .= " AND price >= $minPrice";
-
+    $query_script .= " AND price >= ?";
+    $params[] = $minPrice;
+    $types .= "i";
 }
+
 if ($maxPrice !== null) {
-    $query_script .= " AND price <= $maxPrice";
-}
-if ($type !== null) {
-    $query_script .= " AND type = $type";
-}
-if ($date !== null) {
-    $query_script .= " AND date = $date";
-}
-if ($notes !== null) {
-    $query_script .= " AND notes LIKE '%$notes%'";
+    $query_script .= " AND price <= ?";
+    $params[] = $maxPrice;
+    $types .= "i";
 }
 
+if ($type !== null) {
+    $query_script .= " AND type = ?";
+    $params[] = $type;
+    $types .= "s";
+}
+
+if ($date !== null) {
+    $query_script .= " AND date = ?";
+    $params[] = $date;
+    $types .= "s";
+}
+
+if ($notes !== null) {
+    $query_script .= " AND notes LIKE ?";
+    $params[] = "%$notes%";
+    $types .= "s";
+}
 
 $query = $connection->prepare($query_script);
+$query->bind_param($types, ...$params);
 
 $query->execute();
-
 $result = $query->get_result();
 
-
-if($result->num_rows > 0){
+if ($result->num_rows > 0) {
     $transactions_array = [];
-    while($resultObject = $result->fetch_assoc()){
+    while ($resultObject = $result->fetch_assoc()) {
         $transactions_array[] = $resultObject;
     }
-
-    $json_result = json_encode($transactions_array);
-    echo $json_result;
+    echo json_encode($transactions_array);
+} else {
+    echo json_encode([]);
 }
