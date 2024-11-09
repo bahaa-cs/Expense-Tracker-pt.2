@@ -15,7 +15,8 @@ loginBtn.addEventListener("click",()=>{
         })
      .then(response => {
         if(response.data === null){
-            // create user and enter to the page with its id
+            // i need to create user and enter to the page with its id
+
         }
         else{
             const user = response.data

@@ -1,17 +1,17 @@
 const urlParams = new URLSearchParams();
-let userId = urlParams.get('user_id')
+let userId = urlParams.get('user_id') || localStorage.getItem('user_id');
 document.addEventListener("DOMContentLoaded", () => {
+
 
     if (userId) {
         localStorage.setItem("user_id", userId);
-        
-        if (!urlParams.get('user_id')) {
+                if (!urlParams.get('user_id')) {
             urlParams.set('user_id', userId);
             window.history.replaceState(null, null, `?${urlParams.toString()}`);
         }
 
     } else {
-        console.error("no user ID");
+        console.error("no user ID!");
     }
 });
 
