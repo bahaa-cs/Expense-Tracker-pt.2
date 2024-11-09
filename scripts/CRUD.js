@@ -191,6 +191,9 @@ document.addEventListener("click", (event) => {
       })
       .catch((error) => {
         console.error("Error:", error);
-      });
+      })
+      .finally(()=>{
+        location.reload()
+      })
   }
 });
