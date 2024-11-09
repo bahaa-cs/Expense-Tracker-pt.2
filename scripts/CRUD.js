@@ -116,7 +116,7 @@ document.addEventListener("click", (event)=>{
         let transactionID = event.target.parentElement.parentElement.getAttribute("id")
         axios.post('http://localhost:8080/expense-tracker-server/apis/getTransactionById.php',
             {
-                id:Number(transactionID)
+                id:transactionID
             }
             ,
             {
