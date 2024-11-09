@@ -1,10 +1,27 @@
+const urlParams = new URLSearchParams();
+let userId = urlParams.get('user_id')
+document.addEventListener("DOMContentLoaded", () => {
+
+    if (userId) {
+        localStorage.setItem("user_id", userId);
+        
+        if (!urlParams.get('user_id')) {
+            urlParams.set('user_id', userId);
+            window.history.replaceState(null, null, `?${urlParams.toString()}`);
+        }
+
+    } else {
+        console.error("no user ID");
+    }
+});
+
 const saveTransaction = () => {
     const transactionData = {
         price: Number(document.getElementById("price").value),
         type: document.getElementById("type").value,
         date: new Date(document.getElementById("date").value).toISOString().slice(0, 10),
         notes: document.getElementById("notes").value,
-        users_id:1
+        users_id:userId
         };
 
         console.log(transactionData)
@@ -17,10 +34,16 @@ const saveTransaction = () => {
             }
     
             )
-          .then(response => {console.log('Response:', response.data);
+          .then(response => {
+            console.log('Response:', response.data);
+            
           })
           .catch(error => {console.error('Error:', error);
-          });        
+          })
+          .finally(()=>{
+            reloadTransactions()   
+          })
+
 
         document.getElementById("transactionForm").reset()
     }
@@ -50,7 +73,7 @@ const reloadHTML  = (transactions) =>{
 const reloadTransactions = () =>{
     let transactions;
     axios.post('http://localhost:8080/expense-tracker-server/apis/getTransactions.php',
-        {users_id : 1},
+        {users_id : userId},
         {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -60,13 +83,18 @@ const reloadTransactions = () =>{
     .then((response) =>{
     
       transactions = response.data;
-      reloadHTML(transactions);
+      
+      
+    })
+    .finally(()=>{
+        reloadHTML(transactions);
     })
 
 }
 
 window.addEventListener("load", () => {
-    reloadTransactions()    
+    reloadTransactions()   
+    
 })
 
 
@@ -76,8 +104,11 @@ document.getElementById("transactionForm").addEventListener("submit",(event) => 
 
     let transactionID = document.getElementById("id").value
     
-    if(transactionID == undefined || transactionID == "")
+    if(transactionID == undefined || transactionID == ""){
+        
         saveTransaction()
+
+    }
     else{
         const updated_transactionData = {
             id:transactionID,
@@ -85,7 +116,7 @@ document.getElementById("transactionForm").addEventListener("submit",(event) => 
             type: document.getElementById("type").value,
             date: new Date(document.getElementById("date").value).toISOString().slice(0, 10),
             notes: document.getElementById("notes").value,
-            users_id:1
+            users_id:userId
             };
 
 
@@ -104,6 +135,7 @@ document.getElementById("transactionForm").addEventListener("submit",(event) => 
             .catch(error => {console.error('Error:', error);
             });
         }
+        reloadTransactions()   
 
         
 })
@@ -149,7 +181,7 @@ document.addEventListener("click", (event)=>{
         let transactionID = event.target.parentElement.parentElement.getAttribute("id")
         
         let transactionData = {
-            users_id:1,
+            users_id:userId,
             id:transactionID
         }
         axios.post('http://localhost:8080/expense-tracker-server/apis/deleteTransaction.php',
@@ -161,7 +193,6 @@ document.addEventListener("click", (event)=>{
             })
          .then(() => {
             reloadTransactions()
-            location.reload()
          })
          .catch(error => {console.error('Error:', error);
          });
