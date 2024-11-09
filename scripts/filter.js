@@ -1,5 +1,5 @@
 document.getElementById("filter").addEventListener("click", () => {
-  const users_id = 1;
+  const users_id = userId;
   const minPrice =
     Number(document.getElementById("min-price-filter").value) || null;
   const maxPrice =

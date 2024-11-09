@@ -38,9 +38,10 @@ if ($date !== null) {
 }
 
 if ($notes !== null) {
-    $query_script .= " AND notes LIKE ?";
+    $query_script .= " AND (notes LIKE ? OR notes = ? )";
     $params[] = "%$notes%";
-    $types .= "s";
+    $params[] = $notes;
+    $types .= "ss";
 }
 
 $query = $connection->prepare($query_script);

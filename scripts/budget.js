@@ -4,7 +4,7 @@ axios
   .post(
     "http://localhost:8080/expense-tracker-server/apis/getTotalBudget.php",
     {
-      users_id: 1,
+      users_id: userId,
     },
     {
       headers: {
